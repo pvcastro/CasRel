@@ -2,8 +2,7 @@
 from data_loader import data_generator, load_data
 from model import E2EModel, Evaluate
 from utils import extract_items, get_tokenizer, metric
-import os, argparse
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+import argparse
 from keras import backend as K
 if(K.backend() == 'tensorflow'):
     import tensorflow as tf
