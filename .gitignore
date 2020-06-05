@@ -127,3 +127,17 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+.idea/
+/pretrained_bert_models/cased_L-12_H-768_A-12/
+/pretrained_bert_models/uncased_L-12_H-768_A-12/
+/pretrained_bert_models/cased_L-12_H-768_A-12.zip
+/pretrained_bert_models/uncased_L-12_H-768_A-12.zip
+/saved_weights/NYT10-HRL/best_model.weights
+/data/NYT/raw_NYT/*.json
+/data/**/dev.json
+/data/**/test.json
+/data/**/train.json
+/data/**/vector.txt
+/data/**/test-plus.json
+/data/**/test-sub.json

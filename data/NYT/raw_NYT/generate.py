@@ -1,5 +1,6 @@
-import json
+import json, fire
 import numpy as np
+
 
 def is_normal_triple(triples, is_relation_first=False):
     entities = set()
@@ -8,6 +9,7 @@ def is_normal_triple(triples, is_relation_first=False):
         if i % 3 != key:
             entities.add(e)
     return len(entities) == 2 * int(len(triples) / 3)
+
 
 def is_multi_label(triples, is_relation_first=False):
     if is_normal_triple(triples, is_relation_first):
@@ -18,6 +20,7 @@ def is_multi_label(triples, is_relation_first=False):
         entity_pair = [tuple(triples[3 * i: 3 * i + 2]) for i in range(int(len(triples) / 3))]
     # if is multi label, then, at least one entity pair appeared more than once
     return len(entity_pair) != len(set(entity_pair))
+
 
 def is_over_lapping(triples, is_relation_first=False):
     if is_normal_triple(triples, is_relation_first):
@@ -34,8 +37,11 @@ def is_over_lapping(triples, is_relation_first=False):
     entities = set(entities)
     return len(entities) != 2 * len(entity_pair)
 
+
 def load_data(in_file, word_dict, rel_dict, out_file, normal_file, epo_file, seo_file):
-    with open(in_file, 'r') as f1, open(out_file, 'w') as f2, open(normal_file, 'w') as f3, open(epo_file, 'w') as f4, open(seo_file, 'w') as f5:
+    with open(in_file, 'r') as f1, open(out_file, 'w') as f2, open(normal_file, 'w') as f3, open(epo_file,
+                                                                                                 'w') as f4, open(
+        seo_file, 'w') as f5:
         cnt_normal = 0
         cnt_epo = 0
         cnt_seo = 0
@@ -48,12 +54,12 @@ def load_data(in_file, word_dict, rel_dict, out_file, normal_file, epo_file, seo
             print(len(sents))
             for i in range(len(sents)):
                 new_line = dict()
-                #print(sents[i])
-                #print(spos[i])
+                # print(sents[i])
+                # print(spos[i])
                 tokens = [word_dict[i] for i in sents[i]]
                 sent = ' '.join(tokens)
                 new_line['sentText'] = sent
-                triples = np.reshape(spos[i], (-1,3))
+                triples = np.reshape(spos[i], (-1, 3))
                 relationMentions = []
                 for triple in triples:
                     rel = dict()
@@ -70,15 +76,19 @@ def load_data(in_file, word_dict, rel_dict, out_file, normal_file, epo_file, seo
                 if is_over_lapping(spos[i]):
                     f5.write(json.dumps(new_line) + '\n')
 
-if __name__ == '__main__':
-    file_name = 'valid.json'
-    output = 'new_valid.json'
-    output_normal = 'new_valid_normal.json'
-    output_epo = 'new_valid_epo.json'
-    output_seo = 'new_valid_seo.json'
+
+def convert_files(file_type='valid'):
+    file_name = '{}.json'.format(file_type)
+    output = 'new_{}.json'.format(file_type)
+    output_normal = 'new_{}_normal.json'.format(file_type)
+    output_epo = 'new_{}_epo.json'.format(file_type)
+    output_seo = 'new_{}_seo.json'.format(file_type)
     with open('relations2id.json', 'r') as f1, open('words2id.json', 'r') as f2:
         rel2id = json.load(f1)
         words2id = json.load(f2)
-    rel_dict = {j:i for i,j in rel2id.items()}
-    word_dict = {j:i for i,j in words2id.items()}
+    rel_dict = {j: i for i, j in rel2id.items()}
+    word_dict = {j: i for i, j in words2id.items()}
     load_data(file_name, word_dict, rel_dict, output, output_normal, output_epo, output_seo)
+
+
+if __name__ == '__main__': fire.Fire(convert_files)

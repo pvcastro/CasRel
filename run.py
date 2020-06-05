@@ -3,7 +3,7 @@ from data_loader import data_generator, load_data
 from model import E2EModel, Evaluate
 from utils import extract_items, get_tokenizer, metric
 import os, argparse
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 from keras import backend as K
 if(K.backend() == 'tensorflow'):
     import tensorflow as tf
@@ -20,7 +20,7 @@ args = parser.parse_args()
 
 if __name__ == '__main__':
     # pre-trained bert model config
-    bert_model = 'cased_L-12_H-768_A-12'
+    bert_model = 'uncased_L-12_H-768_A-12'
     bert_config_path = 'pretrained_bert_models/' + bert_model + '/bert_config.json'
     bert_vocab_path = 'pretrained_bert_models/' + bert_model + '/vocab.txt'
     bert_checkpoint_path = 'pretrained_bert_models/' + bert_model + '/bert_model.ckpt'
@@ -30,7 +30,7 @@ if __name__ == '__main__':
     dev_path = 'data/' + dataset + '/dev_triples.json'
     # test_path = 'data/' + dataset + '/test_split_by_num/test_triples_5.json' # ['1','2','3','4','5']
     # test_path = 'data/' + dataset + '/test_split_by_type/test_triples_seo.json' # ['normal', 'seo', 'epo']
-    # test_path = 'data/' + dataset + '/test_triples.json' # overall test
+    test_path = 'data/' + dataset + '/test_triples.json' # overall test
     rel_dict_path = 'data/' + dataset + '/rel2id.json'
     save_weights_path = 'saved_weights/' + dataset + '/best_model.weights'
     
@@ -40,7 +40,7 @@ if __name__ == '__main__':
     subject_model, object_model, hbt_model = E2EModel(bert_config_path, bert_checkpoint_path, LR, num_rels)
     
     if args.train:
-        BATCH_SIZE = 6
+        BATCH_SIZE = 5
         EPOCH = 100
         MAX_LEN = 100
         STEPS = len(train_data) // BATCH_SIZE

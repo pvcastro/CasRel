@@ -33,7 +33,7 @@ def get_tokenizer(vocab_path):
         for line in reader:
             token = line.strip()
             token_dict[token] = len(token_dict)
-    return HBTokenizer(token_dict, cased=True)
+    return HBTokenizer(token_dict, cased='uncased' not in vocab_path)
 
 def seq_gather(x):
     seq, idxs = x
