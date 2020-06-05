@@ -14,6 +14,7 @@ if(K.backend() == 'tensorflow'):
 
 parser = argparse.ArgumentParser(description='Model Controller')
 parser.add_argument('--train', default=False, type=bool, help='to train the HBT model, python run.py --train=True')
+parser.add_argument('--batch_size', default=5, type=int, help='Batch size, python run.py --batch_size=5')
 parser.add_argument('--dataset', default='WebNLG', type=str, help='specify the dataset from ["NYT","WebNLG","ACE04","NYT10-HRL","NYT11-HRL","Wiki-KBP"]')
 args = parser.parse_args()
 
@@ -40,7 +41,7 @@ if __name__ == '__main__':
     subject_model, object_model, hbt_model = E2EModel(bert_config_path, bert_checkpoint_path, LR, num_rels)
     
     if args.train:
-        BATCH_SIZE = 5
+        BATCH_SIZE = args.batch_size
         EPOCH = 100
         MAX_LEN = 100
         STEPS = len(train_data) // BATCH_SIZE
